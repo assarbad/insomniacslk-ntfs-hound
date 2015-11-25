@@ -150,9 +150,20 @@ To do this, go to the menu Templates -> Edit Templates List, click on New and th
 
 To run the template, press F5 or go to Templates -> Run Template and select MFTRecord. If the MFT record is valid, the template will show you all of its fields in the central pane.
 
- Screenshot goes here
 
 Expand the various fields, and you will see that you can click on any field and see the corresponding bytes on the pane above, and the meaning on the central pane. Just explore it and enjoy :)
+
+
+The next image shows the details for the $MFT special record:
+
+
+ ![MFT Record $MFT](images/mft_record_mft.png)
+
+
+The next image shows the details for a regular file record:
+
+
+ ![MFT Record file](images/mft_record_file.png)
 
 ## Contact me ##
 
