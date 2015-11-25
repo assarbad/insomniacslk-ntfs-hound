@@ -1,0 +1,54 @@
+//--------------------------------------
+//--- 010 Editor v6.0.3 Script File
+//
+// File: FindMFT.1sc
+// Author: Andrea Barberio <insomniac@slackware.it>
+// Revision: 1
+// Purpose: Scan an NTFS volume to find the $MFT record. Assumes that the boot sector cannot be used for the purpose
+//--------------------------------------
+
+RequiresVersion(4.0);
+RequiresFile();
+
+const    ushort BLOCK_SIZE = 1024;
+uchar    block[BLOCK_SIZE];
+uquad    remaining,
+         offset,
+         bufsize;
+uint32   num_entries;
+uchar    record_num[4];
+int      found = 0;
+
+offset = 0;
+remaining = FileSize();
+num_entries = 0;
+
+while (remaining > 0) {
+    bufsize = remaining < BLOCK_SIZE ? remaining : BLOCK_SIZE;
+    ReadBytes(block, offset, bufsize);
+    if (Strncmp(block, "FILE", 4) == 0) {
+        num_entries++;
+        Memcpy(record_num, block, 4, 0, 0x2c);
+        if (Strncmp(record_num, "\x00\x00\x00\x00", 4) == 0) {
+            found = 1;
+            break;
+        }
+    }
+    offset += bufsize;
+    remaining -= bufsize;
+}
+
+Printf("Found %lu MFT records\n", num_entries);
+
+string msg;
+if (found) {
+    SetCursorPos(offset);
+    SPrintf(msg, "$MFT record found at 0x%016x", offset);
+    Printf(msg + "\n");
+    MessageBox(idOk, GetScriptName(), msg);
+} else {
+    msg = "$MFT record not found";
+    Printf(msg + "\n");
+    MessageBox(idOk, GetScriptName(), msg);
+}
+
