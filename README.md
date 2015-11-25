@@ -132,7 +132,7 @@ Open 010 Editor, add the script using the menu Scripts -> Edit Scripts List, cli
 
 To run the script, press F7 or go to Scripts -> Run Script and select FindMFT. If the MFT is found, you will get a message box with the offset to the MFT record. The record is always 1024 bytes long and starts with the string "FILE".
 
- Screenshot goes here
+ ![FindMFT script example](images/mft_script.png)
 
 
 In order to analyse a record with the template shown below, you have to select the 1024-bytes block. To do this, select it with the mouse and stop when the value Size on the status bar on the bottom right reaches 1024. Then right-click on the selection and save the selection to a file.
