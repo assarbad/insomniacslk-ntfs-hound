@@ -6,7 +6,7 @@
 
 NTFS Hound is a collection of tools that facilitate forensic analysis of NTFS volumes. Specifically, NTFS Hound features:
 
-* ```dump_offsets.c```, a small C program to quickly find MFS records from the NTFS volume
+* ```dump_offsets.c```, a small C program to quickly find MFT records from the NTFS volume
 * ```FindMFT.1sc```, a script for [010 Editor](http://www.sweetscape.com/010editor/) to find the $MFT record in an NTFS partition dump
 * ```MFTRecord.bt```, a template for 010 Editor to facilitate the analysis of an MFT record. The record has to be saved as a separate file on disk (see below for instructions and screenshots)
 
