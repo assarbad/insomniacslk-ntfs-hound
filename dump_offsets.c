@@ -18,7 +18,15 @@ extern int	 errno;
 #define ATTR_FIXED_HEADER_SIZE		0x10
 #define ATTR_FILENAME_LENGTH_OFFSET	(ATTR_FIXED_HEADER_SIZE + 0x48)
 #define ATTR_FILENAME_NAME_OFFSET	(ATTR_FIXED_HEADER_SIZE + 0x4a)
+#define ATTR_TERMINATOR			0xffffffff
+#define ATTR_TYPE_FILE_NAME		0x30
 
+#define MFT_FIRST_ATTRIBUTE_OFFSET	0x14
+#define MFT_FLAGS_OFFSET		0x16
+#define MFT_FLAGS_IN_USE		0x01
+#define MFT_FLAGS_DIRECTORY		0x02
+
+#define MFT_RECORD_NUM_OFFSET		0x2c
 
 const char *
 get_record_name_by_id(uint32_t record_id) {
@@ -76,7 +84,7 @@ extract_name_from_record(char *record) {
 		return(NULL);
 	}
 	/* locate the attribute list start */
-	offset = *(&record[0x14]);
+	offset = *(&record[MFT_FIRST_ATTRIBUTE_OFFSET]);
 
 	file_name = NULL;
 	for (;;) {
@@ -87,12 +95,12 @@ extract_name_from_record(char *record) {
 		attr_type = *(&record[offset]);
 		attr_len = *(uint32_t *)(&record[offset + 4]);
 		/* check if there are more attributes */
-		if (attr_type == 0xffffffff) {
+		if (attr_type == ATTR_TERMINATOR) {
 			/* end of attributes list reached */
 			break;
 		}
 		/* look for FILE_NAME attribute */
-		if (attr_type != 0x30) {
+		if (attr_type != ATTR_TYPE_FILE_NAME) {
 			/* not a $FILE_NAME attribute */
 			offset += attr_len;
 			/* align to the next 8-byte boundary */
@@ -184,15 +192,15 @@ main(int argc, char *argv[]) {
 		if (strncmp(chunk, RECORD_SIGNATURE,
 				strlen(RECORD_SIGNATURE)) == 0) {
 			/* this is probably an MFT record */
-			record_num = *(&chunk[0x2c]);
+			record_num = *(&chunk[MFT_RECORD_NUM_OFFSET]);
 			record_name = (char *)get_record_name_by_id(record_num);
 			file_name = (wchar_t *)extract_name_from_record(chunk);
-			flags = *(&chunk[0x16]);
-			if (flags & 0x1)
+			flags = *(&chunk[MFT_FLAGS_OFFSET]);
+			if (flags & MFT_FLAGS_IN_USE)
 				in_use = "yes";
 			else
 				in_use = "no";
-			if (flags & 0x2)
+			if (flags & MFT_FLAGS_DIRECTORY)
 				type = "directory";
 			else
 				type = "file";
@@ -204,7 +212,6 @@ main(int argc, char *argv[]) {
 				offset,
 				record_num,
 				file_name,
-/*				(record_name[0] == '\0' ? "unknown" : record_name), */
 				type,
 				in_use
 			);
