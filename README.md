@@ -8,7 +8,7 @@ NTFS Hound is a collection of tools that facilitate forensic analysis of NTFS vo
 
 * ```dump_offsets.c```, a small C program to quickly find MFT records in an NTFS volume dump
 * ```FindMFT.1sc```, a script for [010 Editor](http://www.sweetscape.com/010editor/) to find the $MFT record in an NTFS partition dump
-* ```MFTRecord.bt```, a template for 010 Editor to facilitate the analysis of an MFT record. The record has to be saved as a separate file on disk (see below for instructions and screenshots)
+* ```MFTRecord.bt```, a template for 010 Editor to facilitate the analysis of an MFT record. The record has to be saved as a separate file on disk (see below for instructions and screenshots). The template is also published on 010 Editor's website on the [templates page](http://www.sweetscape.com/010editor/templates/), just look for ```MTFRecord``` .
 
 These tools have been developed for the COMP40750 - Corporate investigation course of the [M.Sc. in Digital Investigations and Forensic Computing](https://www.cs.ucd.ie/PostgraduateProgrammes/MSc_DIFC/) at [UCD University College Dublin](https://www.ucd.ie/). This is a companion tool of [mergelogs](https://bitbucket.org/insomniacslk/mergelogs) developed for the same course.
 
